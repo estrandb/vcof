@@ -40,7 +40,7 @@
 /* Private variables ---------------------------------------------------------*/
 DAC_InitTypeDef  DAC_InitStructure;
 
-uint16_t Sine12bit[4096];
+long double Sine12bit[NUM_SAMPLES];
 const uint8_t Escalator8bit[6] = {0x0, 0x33, 0x66, 0x99, 0xCC, 0xFF};
 __IO uint8_t SelectedWavesForm = 0;
 __IO uint8_t KeyPressed = SET; 
@@ -71,10 +71,10 @@ int main(void)
   //playing around with generating a sin wave table
   //int x = 4096*sin(w*1000);
   
-  /*int i = 0;
-  for (i = 0; i < NUM_SAMPLES - 1; i++)
+  /*double i = 0;
+  for (i = 0; i < NUM_SAMPLES; i = i + 1)
   {
-      Sine12bit[i] = 4096*sin(w*i);
+      Sine12bit[(int)i] = sin(i * pi/NUM_SAMPLES);
   }*/
   
 
@@ -112,36 +112,7 @@ int main(void)
   //this thing is busted atm
   while (1)
   {
-    /* If the User Button is pressed */
-    if (KeyPressed == RESET)
-    {            
-      DAC_DeInit(); 
-
-      /* select waves forms according to the Key Button status */
-      if (SelectedWavesForm == 1)
-      {
-        /* The sine wave and the escalator wave has been selected */
-
-        /* Escalator Wave generator ------------------------------------------*/
-        DAC_Ch1_EscalatorConfig();
-
-        /* Sine Wave generator -----------------------------------------------*/
-        DAC_Ch2_SineWaveConfig();
-         
-      }
-      else
-      {
-        /* The triangle wave and the noise wave has been selected */
-
-        /* Noise Wave generator ----------------------------------------------*/
-        DAC_Ch1_NoiseConfig();
-
-        /* Triangle Wave generator -------------------------------------------*/
-        DAC_Ch2_TriangleConfig();
-      }
-      
-      KeyPressed = SET; 
-    }
+  
   }
 }
 
